@@ -1,0 +1,32 @@
+# Configuration used for CI deployment stage / production-like runs
+server:
+  host: 0.0.0.0
+  port: 8080
+  websocket:
+    ping_interval: 20
+    ping_timeout: 40
+  cors:
+    allow_origins:
+      - https://app.moneybot.ai
+      - https://moneybot.ai
+
+runtime:
+  run_parallel: true
+  device: cuda
+  max_workers: 24
+
+models:
+  llm:
+    provider: local
+    tool_agent_model: Mistral-7B-Instruct-v0.3
+    judge_model: Mistral-7B-Instruct-v0.3
+  embeddings:
+    provider: local
+    model: embeddinggemma-300m
+
+workflow:
+  top_k_investments: 5
+  max_reruns: 2
+
+frontend:
+  base_url: https://api.moneybot.ai

@@ -1,0 +1,228 @@
+name: MoneyBot Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      restart_only:
+        description: "Restart existing service without reinstalling dependencies"
+        required: false
+        default: "false"
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    env:
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore environment.yml (Linux/macOS)
+        if: runner.os != 'Windows'
+        env:
+          ENVIRONMENT_YML_B64: ${{ secrets.ENVIRONMENT_YML_B64 }}
+        run: |
+          if [ ! -f environment.yml ] && [ -n "$ENVIRONMENT_YML_B64" ]; then
+            echo "$ENVIRONMENT_YML_B64" | base64 -d > environment.yml
+          fi
+
+      - name: Restore environment.yml (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          ENVIRONMENT_YML_B64: ${{ secrets.ENVIRONMENT_YML_B64 }}
+        run: |
+          if ((-not (Test-Path environment.yml)) -and ($env:ENVIRONMENT_YML_B64)) {
+            [IO.File]::WriteAllBytes('environment.yml', [System.Convert]::FromBase64String($env:ENVIRONMENT_YML_B64))
+          }
+
+      - name: Setup Conda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-activate-base: false
+          activate-environment: moneybot
+          environment-file: environment.yml
+          use-only-tar-bz2: true
+
+      - name: Cache Conda environment (Linux/macOS)
+        if: ${{ runner.os != 'Windows' && github.event.inputs.restart_only != 'true' }}
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.conda/envs/moneybot
+            ~/.conda/pkgs
+          key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-conda-
+
+      - name: Cache Conda environment (Windows)
+        if: ${{ runner.os == 'Windows' && github.event.inputs.restart_only != 'true' }}
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~\conda\envs\moneybot
+            ~\conda\pkgs
+          key: ${{ runner.os }}-conda-${{ hashFiles('environment.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-conda-
+          
+      - name: Ensure config directory (Linux/macOS)
+        if: ${{ runner.os != 'Windows' }}
+        run: mkdir -p config
+
+      - name: Ensure config directory (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        shell: pwsh
+        run: |
+          New-Item -Path "config" -ItemType Directory -Force | Out-Null
+
+      - name: Restore .env.ci.deploy (Linux/macOS)
+        if: runner.os != 'Windows'
+        env:
+          ENV_CI_DEPLOY_B64: ${{ secrets.ENV_CI_DEPLOY_B64 }}
+        run: |
+          if [ ! -f .env.ci.deploy ] && [ -n "$ENV_CI_DEPLOY_B64" ]; then
+            echo "$ENV_CI_DEPLOY_B64" | base64 -d > .env.ci.deploy
+          fi
+
+      - name: Restore .env.ci.deploy (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          ENV_CI_DEPLOY_B64: ${{ secrets.ENV_CI_DEPLOY_B64 }}
+        run: |
+          if ((-not (Test-Path .env.ci.deploy)) -and ($env:ENV_CI_DEPLOY_B64)) {
+            [IO.File]::WriteAllBytes('.env.ci.deploy', [System.Convert]::FromBase64String($env:ENV_CI_DEPLOY_B64))
+          }
+
+      - name: Restore config/ci.deploy.yml (Linux/macOS)
+        if: runner.os != 'Windows'
+        env:
+          CONFIG_CI_DEPLOY_YML_B64: ${{ secrets.CONFIG_CI_DEPLOY_YML_B64 }}
+        run: |
+          if [ ! -f config/ci.deploy.yml ] && [ -n "$CONFIG_CI_DEPLOY_YML_B64" ]; then
+            echo "$CONFIG_CI_DEPLOY_YML_B64" | base64 -d > config/ci.deploy.yml
+          fi
+
+      - name: Restore config/ci.deploy.yml (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        env:
+          CONFIG_CI_DEPLOY_YML_B64: ${{ secrets.CONFIG_CI_DEPLOY_YML_B64 }}
+        run: |
+          if ((-not (Test-Path config/ci.deploy.yml)) -and ($env:CONFIG_CI_DEPLOY_YML_B64)) {
+            [IO.File]::WriteAllBytes('config/ci.deploy.yml', [System.Convert]::FromBase64String($env:CONFIG_CI_DEPLOY_YML_B64))
+          }
+
+      - name: Install dependencies (Linux/macOS)
+        if: ${{ runner.os != 'Windows' && github.event.inputs.restart_only != 'true' }}
+        shell: bash -el {0}
+        run: |
+          conda env update --file environment.yml --prune
+          if command -v nvidia-smi >/dev/null 2>&1; then
+            echo "GPU detected; ensuring CUDA wheels"
+            pip install --index-url https://download.pytorch.org/whl/cu121 torch torchvision torchaudio || true
+          else
+            echo "No GPU detected; using CPU defaults"
+          fi
+
+      - name: Install dependencies (Windows)
+        if: ${{ runner.os == 'Windows' && github.event.inputs.restart_only != 'true' }}
+        shell: pwsh
+        run: |
+          conda env update --file environment.yml --prune
+          $nvidia = Get-Command nvidia-smi -ErrorAction SilentlyContinue
+          if ($nvidia) {
+            Write-Host "GPU detected; attempting CUDA wheel install"
+            pip install --index-url https://download.pytorch.org/whl/cu121 torch torchvision torchaudio
+          } else {
+            Write-Host "No GPU detected; using CPU defaults"
+          }
+
+      - name: Stop existing service (Linux)
+        if: ${{ runner.os != 'Windows' }}
+        run: |
+          if command -v systemctl >/dev/null 2>&1; then
+            if command -v sudo >/dev/null 2>&1; then
+              sudo systemctl stop moneybot || true
+            else
+              systemctl stop moneybot || true
+            fi
+          fi
+
+      - name: Stop existing service (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        shell: pwsh
+        run: |
+          $svc = Get-Service -Name "moneybot" -ErrorAction SilentlyContinue
+          if ($svc) {
+            Stop-Service -Name "moneybot" -ErrorAction SilentlyContinue
+          }
+
+      - name: Start service (Linux)
+        if: ${{ runner.os != 'Windows' }}
+        shell: bash -el {0}
+        run: |
+          if command -v systemctl >/dev/null 2>&1; then
+            if command -v sudo >/dev/null 2>&1; then
+              sudo systemctl daemon-reload || true
+              sudo systemctl enable moneybot || true
+              sudo systemctl start moneybot || true
+            else
+              systemctl daemon-reload || true
+              systemctl enable moneybot || true
+              systemctl start moneybot || true
+            fi
+            if ! systemctl is-active --quiet moneybot 2>/dev/null; then
+              echo "Falling back to user-level process"
+              nohup python -m src.langgraph_workflow.app --preset ci.deploy --host 0.0.0.0 --port 8080 > moneybot.out 2>&1 &
+              echo $! > moneybot.pid
+            fi
+          else
+            echo "systemctl not available; launching user-level process"
+            nohup python -m src.langgraph_workflow.app --preset ci.deploy --host 0.0.0.0 --port 8080 > moneybot.out 2>&1 &
+            echo $! > moneybot.pid
+          fi
+
+      - name: Start service (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        shell: pwsh
+        run: |
+          $svc = Get-Service -Name "moneybot" -ErrorAction SilentlyContinue
+          if ($svc) {
+            Start-Service -Name "moneybot"
+          } else {
+            conda activate moneybot
+            Start-Process -NoNewWindow -FilePath "python" -ArgumentList "-m","src.langgraph_workflow.app","--preset","ci.deploy","--host","0.0.0.0","--port","8080" -RedirectStandardOutput "moneybot.out" -RedirectStandardError "moneybot.err"
+          }
+
+      - name: Health check (Linux/macOS)
+        if: ${{ runner.os != 'Windows' }}
+        shell: bash -el {0}
+        run: |
+          sleep 5
+          curl -fsS http://127.0.0.1:8080/ || true
+
+      - name: Health check (Windows)
+        if: ${{ runner.os == 'Windows' }}
+        shell: pwsh
+        run: |
+          $url = "http://127.0.0.1:8080/"
+          $success = $false
+          for ($i = 0; $i -lt 10; $i++) {
+            try {
+              $response = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5
+              Write-Host "Health check status:" $response.StatusCode
+              $success = $true
+              break
+            } catch {
+              Write-Host "Health check retry:" $_
+              Start-Sleep -Seconds 3
+            }
+          }
+          if (-not $success) {
+            throw "Service health check failed"
+          }

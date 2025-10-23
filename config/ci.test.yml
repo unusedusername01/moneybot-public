@@ -1,0 +1,32 @@
+# Configuration used during CI unit tests / coverage runs
+server:
+  host: 127.0.0.1
+  port: 9000
+  websocket:
+    ping_interval: 30
+    ping_timeout: 60
+  cors:
+    allow_origins:
+      - http://127.0.0.1:5173
+      - http://localhost:5173
+
+runtime:
+  run_parallel: false
+  device: cpu
+  max_workers: 4
+
+models:
+  llm:
+    provider: google
+    tool_agent_model: gemini-2.0-flash
+    judge_model: gemini-2.0-flash
+  embeddings:
+    provider: huggingface
+    model: sentence-transformers/all-MiniLM-L6-v2
+
+workflow:
+  top_k_investments: 5
+  max_reruns: 2
+
+frontend:
+  base_url: http://127.0.0.1:9000

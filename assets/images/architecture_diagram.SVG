@@ -1,0 +1,203 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" style="background-color: #f8f9fa;">
+  <!-- Arrow markers - moved to top for proper reference -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#7f8c8d"/>
+    </marker>
+    <marker id="arrowhead-large" markerWidth="12" markerHeight="12" refX="11" refY="4" orient="auto">
+      <polygon points="0 0, 12 4, 0 8" fill="#7f8c8d"/>
+    </marker>
+    <marker id="arrowhead-small" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto">
+      <polygon points="0 0, 8 2.5, 0 5" fill="#c0392b"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+    MoneyBot Architecture
+  </text>
+  
+  <!-- Layer 1: External Sources -->
+  <g id="external-sources">
+    <text x="100" y="80" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#34495e">External Data Sources</text>
+    
+    <rect x="50" y="100" width="140" height="60" rx="8" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+    <text x="120" y="125" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white" font-weight="bold">Market Data APIs</text>
+    <text x="120" y="145" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white">(Prices, OHLCV)</text>
+    
+    <rect x="210" y="100" width="140" height="60" rx="8" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+    <text x="280" y="125" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white" font-weight="bold">News APIs</text>
+    <text x="280" y="145" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white">(Sentiment, Events)</text>
+    
+    <rect x="370" y="100" width="140" height="60" rx="8" fill="#3498db" stroke="#2980b9" stroke-width="2"/>
+    <text x="440" y="125" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white" font-weight="bold">LLM Provider</text>
+    <text x="440" y="145" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white">(OpenAI/Anthropic)</text>
+  </g>
+  
+  <!-- Arrows from sources to data pipeline -->
+  <path d="M 120 160 L 120 220" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+  <path d="M 280 160 L 280 220" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+  <path d="M 440 160 L 440 220" stroke="#7f8c8d" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+  
+  <!-- Layer 2: Data Pipeline -->
+  <g id="data-pipeline">
+    <rect x="40" y="200" width="500" height="200" rx="8" fill="#ecf0f1" stroke="#bdc3c7" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="50" y="225" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#34495e">Data Pipeline Layer</text>
+    
+    <rect x="60" y="240" width="130" height="50" rx="6" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+    <text x="125" y="260" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" font-weight="bold">data_fetcher.py</text>
+    <text x="125" y="275" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Raw data retrieval</text>
+    
+    <rect x="210" y="240" width="130" height="50" rx="6" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+    <text x="275" y="260" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" font-weight="bold">data_collector.py</text>
+    <text x="275" y="275" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Normalize &amp; features</text>
+    
+    <rect x="360" y="240" width="150" height="50" rx="6" fill="#e74c3c" stroke="#c0392b" stroke-width="2"/>
+    <text x="435" y="260" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" font-weight="bold">prediction_model.py</text>
+    <text x="435" y="275" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">ML/Stats forecasting</text>
+    
+    <rect x="135" y="320" width="120" height="50" rx="6" fill="#e67e22" stroke="#d35400" stroke-width="2"/>
+    <text x="195" y="340" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" font-weight="bold">llm_provider.py</text>
+    <text x="195" y="355" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">LLM interface</text>
+    
+    <rect x="285" y="320" width="120" height="50" rx="6" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2"/>
+    <text x="345" y="340" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" font-weight="bold">constants.py</text>
+    <text x="345" y="355" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Config &amp; params</text>
+  </g>
+  
+  <!-- Arrows within data pipeline -->
+  <path d="M 190 265 L 210 265" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+  <path d="M 340 265 L 360 265" stroke="#2c3e50" stroke-width="2" marker-end="url(#arrowhead)" fill="none"/>
+  
+  <!-- Arrow from data pipeline to workflow -->
+  <path d="M 290 400 L 290 450" stroke="#7f8c8d" stroke-width="3" marker-end="url(#arrowhead-large)" fill="none"/>
+  
+  <!-- Layer 3: LangGraph Workflow -->
+  <g id="langgraph-workflow">
+    <rect x="560" y="200" width="480" height="260" rx="8" fill="#d5e8d4" stroke="#82b366" stroke-width="2" stroke-dasharray="5,5"/>
+    <text x="570" y="225" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2d5016">LangGraph Workflow Orchestration</text>
+    
+    <rect x="580" y="240" width="140" height="60" rx="6" fill="#27ae60" stroke="#229954" stroke-width="2"/>
+    <text x="650" y="260" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" font-weight="bold">app.py</text>
+    <text x="650" y="275" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Graph definition</text>
+    <text x="650" y="288" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Nodes &amp; edges</text>
+    
+    <rect x="750" y="240" width="140" height="60" rx="6" fill="#27ae60" stroke="#229954" stroke-width="2"/>
+    <text x="820" y="260" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" font-weight="bold">rag_manager.py</text>
+    <text x="820" y="275" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Vector store</text>
+    <text x="820" y="288" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Document retrieval</text>
+    
+    <rect x="580" y="330" width="140" height="60" rx="6" fill="#16a085" stroke="#138d75" stroke-width="2"/>
+    <text x="650" y="350" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" font-weight="bold">custom_types.py</text>
+    <text x="650" y="365" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">State schemas</text>
+    <text x="650" y="378" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">I/O types</text>
+    
+    <rect x="750" y="330" width="140" height="60" rx="6" fill="#16a085" stroke="#138d75" stroke-width="2"/>
+    <text x="820" y="350" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" font-weight="bold">utils.py</text>
+    <text x="820" y="365" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Helpers &amp; glue</text>
+    <text x="820" y="378" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Retry logic</text>
+    
+    <!-- Graph flow visualization -->
+    <ellipse cx="925" cy="270" rx="40" ry="30" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+    <text x="925" y="267" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white" font-weight="bold">Fetch</text>
+    <text x="925" y="279" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="white">Node</text>
+    
+    <ellipse cx="990" cy="270" rx="40" ry="30" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+    <text x="990" y="267" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white" font-weight="bold">RAG</text>
+    <text x="990" y="279" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="white">Node</text>
+    
+    <ellipse cx="925" cy="360" rx="40" ry="30" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+    <text x="925" y="357" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white" font-weight="bold">LLM</text>
+    <text x="925" y="369" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="white">Node</text>
+    
+    <ellipse cx="990" cy="360" rx="40" ry="30" fill="#f39c12" stroke="#e67e22" stroke-width="2"/>
+    <text x="990" y="357" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white" font-weight="bold">Predict</text>
+    <text x="990" y="369" font-family="Arial, sans-serif" font-size="8" text-anchor="middle" fill="white">Node</text>
+    
+    <path d="M 965 270 L 950 270" stroke="#c0392b" stroke-width="1.5" marker-end="url(#arrowhead-small)" fill="none"/>
+    <path d="M 925 300 L 925 330" stroke="#c0392b" stroke-width="1.5" marker-end="url(#arrowhead-small)" fill="none"/>
+    <path d="M 965 360 L 950 360" stroke="#c0392b" stroke-width="1.5" marker-end="url(#arrowhead-small)" fill="none"/>
+  </g>
+  
+  <!-- Connection between workflow components -->
+  <path d="M 195 370 L 580 360" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3,3" fill="none"/>
+  
+  <!-- Arrow from workflow to outputs -->
+  <path d="M 800 460 L 800 530" stroke="#7f8c8d" stroke-width="3" marker-end="url(#arrowhead-large)" fill="none"/>
+  
+  <!-- Layer 4: Execution & Output -->
+  <g id="execution-output">
+    <text x="100" y="520" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#34495e">Execution Layer</text>
+    
+    <rect x="50" y="540" width="180" height="70" rx="6" fill="#9b59b6" stroke="#8e44ad" stroke-width="2"/>
+    <text x="140" y="565" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white" font-weight="bold">full_example.py</text>
+    <text x="140" y="585" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white">Demo runner</text>
+    <text x="140" y="598" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white">End-to-end test</text>
+    
+    <rect x="260" y="540" width="180" height="70" rx="6" fill="#9b59b6" stroke="#8e44ad" stroke-width="2"/>
+    <text x="350" y="565" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white" font-weight="bold">tests.py</text>
+    <text x="350" y="585" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white">Unit &amp; integration</text>
+    <text x="350" y="598" font-family="Arial, sans-serif" font-size="10" text-anchor="middle" fill="white">tests</text>
+  </g>
+  
+  <!-- Output Layer -->
+  <g id="output-layer">
+    <text x="570" y="520" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#34495e">Output &amp; Presentation</text>
+    
+    <rect x="560" y="540" width="220" height="100" rx="6" fill="#1abc9c" stroke="#16a085" stroke-width="2"/>
+    <text x="670" y="565" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white" font-weight="bold">Prediction Results</text>
+    <text x="570" y="585" font-family="Arial, sans-serif" font-size="10" fill="white">• Signals (buy/sell/hold)</text>
+    <text x="570" y="602" font-family="Arial, sans-serif" font-size="10" fill="white">• Confidence scores</text>
+    <text x="570" y="619" font-family="Arial, sans-serif" font-size="10" fill="white">• LLM explanations</text>
+    <text x="570" y="636" font-family="Arial, sans-serif" font-size="10" fill="white">• Risk metrics</text>
+    
+    <rect x="810" y="540" width="220" height="100" rx="6" fill="#e91e63" stroke="#c2185b" stroke-width="2"/>
+    <text x="920" y="565" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="white" font-weight="bold">Web Application</text>
+    <text x="820" y="585" font-family="Arial, sans-serif" font-size="10" fill="white">React/TypeScript UI</text>
+    <text x="820" y="602" font-family="Arial, sans-serif" font-size="10" fill="white">• Dashboard components</text>
+    <text x="820" y="619" font-family="Arial, sans-serif" font-size="10" fill="white">• API types (api.ts)</text>
+    <text x="820" y="636" font-family="Arial, sans-serif" font-size="10" fill="white">• Chart visualization</text>
+  </g>
+  
+  <!-- Supporting infrastructure -->
+  <g id="infrastructure">
+    <text x="100" y="690" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#34495e">Configuration &amp; Secrets</text>
+    
+    <rect x="50" y="710" width="140" height="50" rx="6" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2"/>
+    <text x="120" y="730" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" font-weight="bold">keys.py</text>
+    <text x="120" y="745" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">API credentials</text>
+    
+    <rect x="210" y="710" width="140" height="50" rx="6" fill="#95a5a6" stroke="#7f8c8d" stroke-width="2"/>
+    <text x="280" y="730" font-family="Arial, sans-serif" font-size="11" text-anchor="middle" fill="white" font-weight="bold">webapp/.env</text>
+    <text x="280" y="745" font-family="Arial, sans-serif" font-size="9" text-anchor="middle" fill="white">Frontend config</text>
+  </g>
+  
+  <!-- Connections to infrastructure -->
+  <path d="M 120 710 L 120 640" stroke="#7f8c8d" stroke-width="1.5" stroke-dasharray="2,2" fill="none"/>
+  <path d="M 280 710 L 920 640" stroke="#7f8c8d" stroke-width="1.5" stroke-dasharray="2,2" fill="none"/>
+  
+  <!-- Data flow legend -->
+  <g id="legend">
+    <text x="50" y="830" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#34495e">Data Flow Legend:</text>
+    <line x1="50" y1="845" x2="100" y2="845" stroke="#7f8c8d" stroke-width="2"/>
+    <text x="110" y="850" font-family="Arial, sans-serif" font-size="11" fill="#34495e">API/Data flow</text>
+    
+    <line x1="200" y1="845" x2="250" y2="845" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="3,3"/>
+    <text x="260" y="850" font-family="Arial, sans-serif" font-size="11" fill="#34495e">Configuration</text>
+    
+    <line x1="370" y1="845" x2="420" y2="845" stroke="#7f8c8d" stroke-width="3"/>
+    <text x="430" y="850" font-family="Arial, sans-serif" font-size="11" fill="#34495e">Primary flow</text>
+  </g>
+  
+  <!-- Key insights -->
+  <g id="insights">
+    <rect x="560" y="700" width="470" height="140" rx="6" fill="#fff9e6" stroke="#f39c12" stroke-width="2"/>
+    <text x="795" y="725" font-family="Arial, sans-serif" font-size="13" font-weight="bold" text-anchor="middle" fill="#d68910">Key Architecture Insights</text>
+    
+    <text x="570" y="750" font-family="Arial, sans-serif" font-size="10" fill="#34495e">1. <tspan font-weight="bold">Layered design:</tspan> Data → Orchestration → Output</text>
+    <text x="570" y="770" font-family="Arial, sans-serif" font-size="10" fill="#34495e">2. <tspan font-weight="bold">LangGraph</tspan> manages multi-step agent workflows with state</text>
+    <text x="570" y="790" font-family="Arial, sans-serif" font-size="10" fill="#34495e">3. <tspan font-weight="bold">RAG augmentation</tspan> adds domain knowledge to predictions</text>
+    <text x="570" y="810" font-family="Arial, sans-serif" font-size="10" fill="#34495e">4. <tspan font-weight="bold">Hybrid approach:</tspan> ML models + LLM reasoning for explainability</text>
+    <text x="570" y="830" font-family="Arial, sans-serif" font-size="10" fill="#34495e">5. <tspan font-weight="bold">Type-safe:</tspan> Python types (custom_types) mirror TS types (api.ts)</text>
+  </g>
+</svg>

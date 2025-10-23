@@ -1,0 +1,39 @@
+# Config file used by the project's owner on personal machine (indicative only)
+
+app:
+  name: MoneyBot
+  version: 1
+
+server:
+  host: 127.0.0.1
+  port: 8000
+  websocket:
+    ping_interval: 30
+    ping_timeout: 60
+  cors:
+    allow_origins:
+      - http://127.0.0.1:5173
+      - http://localhost:5173
+      - http://127.0.0.1:3000
+      - http://localhost:3000
+
+runtime:
+  run_parallel: false
+  device: auto
+  max_workers: 8
+
+models:
+  llm:
+    provider: lm_studio # Local LLM provider, better UI/UX than local-huggingface deployment 
+    tool_agent_model: qwen/qwen3-4b-2507
+    judge_model: qwen/qwen3-4b-2507
+  embeddings:
+    provider: lm_studio
+    model: text-embedding-nomic-embed-text-v1.5
+
+workflow:
+  top_k_investments: 3
+  max_reruns: 2
+
+frontend:
+  base_url: http://127.0.0.1:8000

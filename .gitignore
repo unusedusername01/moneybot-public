@@ -1,0 +1,29 @@
+# Python bytecode files
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Assets
+data/
+portfolios/
+sector_databases/
+
+# Virtual environments
+.venv/
+venv/
+
+# Node dependencies and build artifacts
+node_modules/
+src/webapp/node_modules/
+src/webapp/dist/
+src/webapp/.vite/
+src/webapp/.eslintcache
+
+# Env files
+.env
+.env.*
+
+# Local configuration overrides
+config/local.yml
