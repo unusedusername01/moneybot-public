@@ -351,7 +351,7 @@ See the [Testing & Coverage](https://github.com/unusedusername01/moneybot-public
 ## Features in progress
 - [ ] Long-term interactions logging to improve the recommendations
 - [ ] Real-time portfolio tracking and rebalancing
-- [ ] Webapp interface for the portfolio management
+- [x] Webapp interface for the portfolio management
 
 ## 📄 License
 
