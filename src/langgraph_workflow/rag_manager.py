@@ -1,3 +1,6 @@
+# Copyright 2025 unusedusername01
+# SPDX-License-Identifier: Apache-2.0
+
 from typing import Union, Dict, List
 from langchain.tools import tool
 from langchain_openai import OpenAIEmbeddings

@@ -1,3 +1,6 @@
+# Copyright 2025 unusedusername01
+# SPDX-License-Identifier: Apache-2.0
+
 """Synchronize frontend environment variables with backend configuration."""
 from __future__ import annotations
 

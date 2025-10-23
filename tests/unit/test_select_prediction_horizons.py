@@ -1,3 +1,6 @@
+# Copyright 2025 unusedusername01
+# SPDX-License-Identifier: Apache-2.0
+
 from datetime import datetime, timedelta
 
 import pytest

@@ -1,3 +1,6 @@
+# Copyright 2025 unusedusername01
+# SPDX-License-Identifier: Apache-2.0
+
 import pytest
 
 from src.langgraph_workflow.utils import group_by_criteria, order_ticker_by_score

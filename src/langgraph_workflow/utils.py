@@ -1,3 +1,6 @@
+# Copyright 2025 unusedusername01
+# SPDX-License-Identifier: Apache-2.0
+
 import json
 import time
 from typing import Optional, List, Dict, Any, Tuple, TypedDict, get_type_hints, Callable
