@@ -1,3 +1,4 @@
+# Data and ML dependencies
 yfinance==0.2.65
 numpy==1.26.4
 requests==2.31.0
@@ -17,6 +18,7 @@ uvicorn
 pillow
 scikit-learn
 
+# Langchain and related
 langgraph>=0.5.2
 langchain>=0.3.26
 langchain_huggingface>=0.3.0
@@ -28,6 +30,7 @@ langchain_core>=0.3.68
 langchain_chroma
 # langchain_openrouter>=0.0.1 Not widely supported yet
 
+# Other frameworks (deployment, config, etc.)
 fastapi==0.116.0
 pyyaml>=6.0
 
