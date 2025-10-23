@@ -27,3 +27,6 @@ src/webapp/.eslintcache
 
 # Local configuration overrides
 config/local.yml
+
+# Wiki
+/wiki

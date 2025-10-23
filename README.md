@@ -1,36 +1,36 @@
 # MoneyBot - AI-Powered Financial Analysis & Portfolio Management
 
-MoneyBot is an intelligent financial analysis system that combines real-time market data, news sentiment analysis, and ML-based predictions to provide comprehensive portfolio recommendations. 
-The typical use case involves:
-1. Creating a portfolio with a certain budget and target date, and a watchlist of stocks to invest in
-2. Run an analysis to get recommendations for the portfolio
-3. (Optional) Re-run the analysis with different parameters to see how the recommendations change
-4. Once satisfied, allocate the portfolio to the stocks in the watchlist
+MoneyBot turns market data, curated news, and model-driven projections into portfolio guidance that you can iterate on in real time.
+The typical flow looks like this:
+1. Create or import a portfolio with budget, horizon, and watchlist constraints.
+2. Run an analysis to generate price targets, allocation ideas, and commentary.
+3. (Optional) Adjust parameters or prompts to test alternative narratives.
+4. Finalize and export allocations once the recommendations align with your strategy.
 
-## � Documentation Hub
+## 📚 Documentation Hub
 
-Long-form documentation now lives under `docs/`:
+Long-form documentation now lives on the GitHub Wiki (mirrored locally under `wiki/`):
 
-- [Architecture Deep Dive](docs/architecture.md) – end-to-end data flow, LangGraph orchestration, and configuration layering
-- [Backend API Reference](docs/backend_api_reference.md) – REST/WebSocket contracts and DTO schemas
-- [Developer Guide](docs/developer_guide.md) – environment setup, presets, and contributor workflow
-- [Testing & Coverage](docs/testing_and_coverage.md) – pytest layout, markers, and coverage expectations
-- [Deployment Guide](docs/deployment_guide.md) – GitHub Actions deploy workflow and self-hosted runner setup
-- [Webapp Guide](docs/webapp_guide.md) – frontend integration plan, API parity, and local dev flow
+- [Wiki Home](https://github.com/unusedusername01/moneybot-public/wiki) – overview of modules, quick links, and contributor context
+- [Architecture](https://github.com/unusedusername01/moneybot-public/wiki/Architecture) – ingestion, orchestration, and deployment layering
+- [Backend API Reference](https://github.com/unusedusername01/moneybot-public/wiki/Backend-API-Reference) – REST/WebSocket contracts and DTO schemas
+- [Developer Guide](https://github.com/unusedusername01/moneybot-public/wiki/Developer-Guide) – environment setup, presets, and contributor workflow
+- [Testing & Coverage](https://github.com/unusedusername01/moneybot-public/wiki/Testing-and-Coverage) – pytest layout, markers, and coverage expectations
+- [Deployment Guide](https://github.com/unusedusername01/moneybot-public/wiki/Deployment-Guide) – GitHub Actions deploy workflow and self-hosted runner setup
+- [Webapp Walkthrough](https://github.com/unusedusername01/moneybot-public/wiki/Webapp-Walkthrough) – frontend integration plan, API parity, and local dev flow
 
-## �🚀 Features
+## 🚀 Features
 
 ### Core Capabilities
 - **Multi-Source Data Integration**: Real-time financial data from Yahoo Finance, market news, and sector-specific information
 - **Dual News Collection System**: 
-  - **Advanced NewsFetcher**: NewsData API integration with sentence transformers and GKG themes
-  - **Default DataCollector**: Efficient local news data retrieval and caching
+   - **Advanced NewsFetcher**: News API integration with sentence transformers and GKG themes
+   - **Default DataCollector**: Efficient local news data retrieval and caching
 - **AI-Powered Analysis**: Advanced LLM integration for financial analysis and sentiment evaluation
 - **Portfolio Management**: Complete portfolio creation, editing, and optimization workflows
 - **Predictive Modeling**: Machine learning-based price predictions with configurable strength levels
 - **Real-time Web Interface**: WebSocket-based real-time communication for interactive analysis
 - **Multi-Currency Support**: Support for 150+ international currencies
-- **Risk Assessment**: Configurable risk tolerance levels and portfolio diversification analysis
 
 ### Technical Features
 - **LangGraph Workflows**: Sophisticated state management and workflow orchestration
@@ -52,10 +52,10 @@ The diagram above captures how market data, LangGraph workflows, and the React w
   - **`rag_manager.py`**: Vector database management and news retrieval
   - **`utils.py`**: Data loading and processing utilities
 - **`src/data_pipeline/`**: Data collection, processing, and LLM integration
-  - **`data_fetcher.py`**: Yahoo Finance integration and NewsFetcher class
-  - **`data_collector.py`**: Default local data collection and caching
-  - **`llm_provider.py`**: Multi-provider LLM integration
-  - **`prediction_model.py`**: ML-based price prediction models
+   - **`data_fetcher.py`**: Yahoo Finance integration and NewsFetcher class
+   - **`data_collector.py`**: Default local data collection and caching
+   - **`llm_provider.py`**: Multi-provider LLM integration
+   - **`prediction_model.py`**: ML-based price prediction models
 - **`src/webapp/`**: Frontend TypeScript interfaces and API types (In development)
 - **`data/`**: Temporary and persistent storage for portfolios, market data, and vector databases
 
@@ -130,7 +130,7 @@ During a typical run you will see:
 - `awaiting_allocation` prompts when the workflow needs revised allocations
 - `end_analysis` once the workflow completes or is cancelled
 
-Screenshots and log snippets for the full narrative are available in [docs/architecture.md](docs/architecture.md) and the new [Testing & Coverage](docs/testing_and_coverage.md) guide.
+Screenshots and log snippets for the full narrative are available in the [Architecture](https://github.com/unusedusername01/moneybot-public/wiki/Architecture) and [Testing & Coverage](https://github.com/unusedusername01/moneybot-public/wiki/Testing-and-Coverage) wiki pages.
 
 ### Web Interface
 
@@ -152,7 +152,7 @@ npm run dev
 
 The frontend is served at `http://127.0.0.1:5173` and communicates with the FastAPI backend at `http://127.0.0.1:8000`.
 
-Refer to the [Webapp Guide](docs/webapp_guide.md) for environment export scripts and API contract details.
+Refer to the [Webapp Walkthrough](https://github.com/unusedusername01/moneybot-public/wiki/Webapp-Walkthrough) for environment export scripts and API contract details.
 
 ## 🧭 Webapp Walkthrough
 
@@ -164,6 +164,9 @@ Refer to the [Webapp Guide](docs/webapp_guide.md) for environment export scripts
 6. **Review recommended allocations**: The allocation card lists per-ticker share counts alongside current pricing and total notional values. Adjust values if needed before confirming.
 7. **Iterate or finalize**: Confirm to log the session and conclude, or rerun with updated instructions to explore alternative recommendations.
 
+![Initial state](assets/screenshots/initial_state.png)
+![Analysis complete](assets/screenshots/analysis_complete.png)
+
 ## 📊 Usage Examples
 
 ### Basic Portfolio Analysis
@@ -174,12 +177,11 @@ from src.langgraph_workflow.custom_types import PortfolioData
 
 # Create portfolio data
 portfolio = PortfolioData(
-    budget=100,
-    target_date="2025-12-31",
-    holdings={"AAPL": 10, "GOOGL": 5, "TSLA": 3},
-    currency="USD",
-    risk_tolerance="medium",
-    prediction_strength="strong"
+   budget=100,
+   target_date="2025-12-31",
+   holdings={"AAPL": 10, "GOOGL": 5, "TSLA": 3},
+   currency="USD",
+   prediction_strength="strong"
 )
 
 # Run analysis workflow
@@ -201,7 +203,7 @@ llm_provider = LangChainLLMProvider(provider="openai")
 
 # Advanced news fetching with API integration
 news_fetcher = NewsFetcher(llm_provider)
-news_fetcher.fetch_news("AAPL")  # Uses NewsData API + sentence transformers
+news_fetcher.fetch_news("AAPL")  # Integrates live feeds + GKG themes
 
 # Default news collection from local cache
 news_data = DataCollector.collect_news("AAPL")  # Loads from local files
@@ -218,7 +220,7 @@ prices = DataFetcher.fetch_historical_prices("AAPL")
 MoneyBot features a sophisticated dual news collection system designed for both real-time analysis and efficient caching:
 
 ### Advanced NewsFetcher
-- **External API Integration**: Uses NewsData API for real-time financial news
+- **External API Integration**: Streams real-time financial headlines from configurable providers
 - **AI-Powered Filtering**: Sentence transformers for relevance scoring
 - **GKG Theme Integration**: Global Knowledge Graph themes for contextual analysis
 - **Multi-Source Aggregation**: Combines ticker-specific, sector, and market news
@@ -244,7 +246,6 @@ Runtime defaults now live under `config/` as layered YAML files:
 - `config/base.yml` – baseline defaults used for local development (mirrors the legacy hardcoded values)
 - `config/ci.test.yml` – lightweight settings for GitHub Actions test/coverage jobs
 - `config/ci.deploy.yml` – high-performance profile for deployment pipelines
-- `config/local.yml` – optional developer overrides (ignored by git)
 
 Load a preset explicitly with:
 
@@ -270,15 +271,9 @@ The system supports multiple LLM provider, including self-hosted models.
 
 ### Prediction Strength Levels
 
-- **Weak**: Basic trend analysis
-- **Medium**: Enhanced feature engineering
-- **Strong**: Advanced ML models with GPU acceleration
-
-### Risk Tolerance Settings
-
-- **Low**: Conservative investments, high diversification
-- **Medium**: Balanced approach
-- **High**: Aggressive growth strategies
+- **Weak**: Polynomial regression overlays for trend alignment
+- **Medium**: Gradient-boosted forest ensembles tuned for sector behavior
+- **Strong**: Transformer-based multi-horizon forecasters with GPU acceleration
 
 ## 🔍 API Reference
 
@@ -315,7 +310,7 @@ pytest -m "e2e"
 pytest --cov=src --cov-report=xml --cov-report=term
 ```
 
-See [docs/testing_and_coverage.md](docs/testing_and_coverage.md) for marker definitions, skip strategies, and CI pipeline details.
+See the [Testing & Coverage](https://github.com/unusedusername01/moneybot-public/wiki/Testing-and-Coverage) wiki page for marker definitions, skip strategies, and CI pipeline details.
 
 ## 🚨 Troubleshooting
 
@@ -346,13 +341,12 @@ See [docs/testing_and_coverage.md](docs/testing_and_coverage.md) for marker defi
 - **Caching**: Vector databases cache embeddings for faster retrieval
 - **Rate Limiting**: Built-in delays prevent API quota exhaustion
 
-## 🤝 Contributing
+## 🤝 Contributing & Support
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Commit changes: `git commit -am 'Add feature'`
-4. Push to branch: `git push origin feature-name`
-5. Submit a pull request
+- Open an issue for bugs, feature ideas, or onboarding questions.
+- Submit pull requests from topic branches (`git checkout -b feature-name`).
+- Mention maintainers in issues if a production-impacting fix is blocked.
+- For private inquiries, use the repository contact email listed in GitHub.
 
 ## Features in progress
 - [ ] Long-term interactions logging to improve the recommendations
@@ -365,21 +359,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
-- **LangChain**: For LLM integration and workflow management
 - **LangGraph**: For sophisticated state management
 - **FastAPI**: For high-performance web framework
 - **Yahoo Finance**: For market data access
-- **NewsData API**: For financial news aggregation
+- **Global Knowledge Graph (GKG)**: For news theming and contextual signals
 - **ChromaDB**: For vector database functionality
-
-## 📞 Support
-
-For questions, issues, or contributions:
-
-- Create an issue on GitHub
-- Check the troubleshooting section
-- Review the API documentation
-- Examine example code in `src/full_example.py`
 
 ---
 
