@@ -351,11 +351,11 @@ See the [Testing & Coverage](https://github.com/unusedusername01/moneybot-public
 ## Features in progress
 - [ ] Long-term interactions logging to improve the recommendations
 - [ ] Real-time portfolio tracking and rebalancing
-- [x] Webapp interface for the portfolio management
+- [ ] Webapp interface for the portfolio management
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the Apache License 2.0 – see the `LICENSE` file for details.
 
 ## 🙏 Acknowledgments
 
